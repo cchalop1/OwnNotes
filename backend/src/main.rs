@@ -19,6 +19,9 @@ use rocket::fairing::AdHoc;
 use rocket_contrib::json::Json;
 use std::collections::HashMap;
 use std::env;
+use uuid::Uuid;
+use crypto::sha1::*;
+use crypto::digest::Digest;
 
 embed_migrations!();
 
@@ -43,24 +46,27 @@ struct NewUser {
 }
 
 #[get("/")]
-fn index() -> Json<HelloMessage> {
-    Json(HelloMessage {
-        message: format!("Hello"),
-    })
+fn index(conn: MyDBConn) -> Json<Vec<user::User>> {
+    match user::User::all(&*conn) {
+        Ok(res) => Json(res),
+        Err(e) => panic!(e),
+    }
 }
 
 #[post("/register", data = "<new_user>")]
 fn create_user(conn: MyDBConn, new_user: Json<NewUser>) -> Json<Response> {
+    let mut hasher = Sha1::new();
+    hasher.input_str(&new_user.password[..]);
     let user = user::User {
-        id: rand::random::<i32>(),
+        id: Uuid::new_v4().to_string(),
         username: new_user.username.clone(),
         email: new_user.email.clone(),
-        password: new_user.password.clone(),
+        password: hasher.result_str(),
     };
 
     match user::User::save(&*conn, user) {
-        Ok(res) => Json(Response {
-            status: format!("{}", res),
+        Ok(_) => Json(Response {
+            status: format!("ok"),
         }),
         Err(_) => Json(Response {
             status: format!("ko"),

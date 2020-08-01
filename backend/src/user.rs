@@ -4,10 +4,10 @@ use super::schema::users;
 use diesel;
 use diesel::prelude::*;
 
-#[derive(Queryable, AsChangeset, Serialize, Deserialize, Insertable)]
+#[derive(Queryable, AsChangeset, Serialize, Deserialize, Insertable, Debug)]
 #[table_name = "users"]
 pub struct User {
-    pub id: i32,
+    pub id: String,
     pub username: String,
     pub email: String,
     pub password: String,
