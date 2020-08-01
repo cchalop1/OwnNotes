@@ -15,6 +15,10 @@ serde_derive = "1.0"
 rand = "0.7"
 uuid = { version = "0.4", features = ["serde", "v4"] }
 rust-crypto = "^0.2"
+time = "0.1"
+jsonwebtoken = "7"
+rustc-serialize = "0.3"
+argon2rs = "0.2.5"
 
 [dependencies.diesel]
 version = "1.0.0"
