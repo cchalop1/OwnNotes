@@ -5,13 +5,15 @@ import "https://deno.land/x/dotenv/load.ts";
 import authMiddleware from './authMiddleware.ts';
 import { Users } from "./models.ts";
 
+const SERVER_PORT: number = Number(Deno.env.get("SERVER_PORT")) || 8000;
+
 const router = new Router();
 
-export const db = new Database('postgres', {
-    database: 'own-notes',
-    host: 'localhost',
-    username: 'test',
-    password: 'test',
+const db = new Database('postgres', {
+    database: Deno.env.get("DB_HOST") || "postgres",
+    host: Deno.env.get("DB_HOST") || "localhost",
+    username: Deno.env.get("DB_USERNAME") || "",
+    password: Deno.env.get("DB_USERNAME") || "",
     port: 5432,
 });
 
@@ -29,5 +31,5 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen({ port: 8000 });
-console.log("Server http://localhost:8000/");
+app.listen({ port: SERVER_PORT });
+console.log(`Server http://localhost:${SERVER_PORT}/`);
