@@ -11,6 +11,12 @@ export const Home: React.FC<Props> = ({ history }) => {
     }
 
     return (
-        <h1>Home</h1>
+        <div className="home">
+            <h1>Home</h1>
+            <button onClick={() => {
+                localStorage.removeItem('login');
+                history.push("/login");
+            }}>logout</button>
+        </div >
     );
 }
