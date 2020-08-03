@@ -1,33 +1,28 @@
 import React, { useState } from "react";
+import { LoginData, fetchLogin } from "../utils/auth";
+import { RouteComponentProps, Link } from "react-router-dom"
 
-interface Props {
-    setUser: (arg: null | string) => void;
-}
+interface Props extends RouteComponentProps { }
 
-const API = "http://localhost:8000"
 
-export const Login: React.FC<Props> = (props) => {
+export const Login: React.FC<Props> = ({ history }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = (e: any) => {
-        setPassword("");
-        const data = {
+    const handleLogin = async (e: any) => {
+        const data: LoginData = {
             email: email,
             password: password
         };
-        fetch(API + "/login", {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: new Headers({
-                'Content-type': 'application/json'
-            })
-        }).then(async res => {
-            // props.setUser()
-            console.log(await res.json());
-        }).catch(async err => {
-            console.error(await err.json());
+        const res = await fetchLogin(data);
+        if (!res.success) {
+
+        }
+        fetchLogin(data).then(res => {
+            localStorage.setItem("login", JSON.stringify(res));
+            history.push("/");
         });
+        setPassword("");
     }
 
     return (
@@ -36,6 +31,7 @@ export const Login: React.FC<Props> = (props) => {
             <input type="text" value={email} placeholder="enter your email" onChange={e => setEmail(e.target.value)} />
             <input type="password" value={password} placeholder="enter your password" onChange={e => setPassword(e.target.value)} />
             <button onClick={handleLogin}>Login</button>
+            <Link to="/register">register accout</Link>
         </div >
     );
 }

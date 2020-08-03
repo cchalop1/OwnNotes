@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
-interface Props extends RouteComponentProps {
-    user: string | null;
-}
+interface Props extends RouteComponentProps { }
 
-export const Home: React.FC<Props> = ({user, history}) => {
+export const Home: React.FC<Props> = ({ history }) => {
+    const user = useState<null | string>(localStorage.getItem("login"));
 
-    if (!user) {
-        history.push("./login")
+    if (!user[0]) {
+        history.push("/login")
     }
 
     return (

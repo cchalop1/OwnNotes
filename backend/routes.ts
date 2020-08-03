@@ -59,7 +59,7 @@ export const login = async (ctx: Context) => {
     ctx.response.status = 200;
     ctx.response.body = {
         success: true,
-        id: user.id,
+        userId: user.id,
         jwt: generateToken(user)
     }
 }
