@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { RegisterData, fetchRegister } from "../utils/auth";
+import { RegisterData, fetchRegister } from "../utils/fetchApi";
 import { RouteComponentProps, Link } from "react-router-dom"
 
 interface Props extends RouteComponentProps { }
@@ -29,7 +29,7 @@ export const Register: React.FC<Props> = ({ history }) => {
             <input type="text" value={username} placeholder="enter your username" onChange={e => setUsername(e.target.value)} />
             <input type="password" value={password} placeholder="enter your password" onChange={e => setPassword(e.target.value)} />
             <button onClick={handleRegister}>Register</button>
-            <Link to="/login"></Link>
+            <Link to="/login">I have a acout</Link>
         </div>
     );
 }

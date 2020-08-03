@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LoginData, fetchLogin } from "../utils/auth";
+import { LoginData, fetchLogin } from "../utils/fetchApi";
 import { RouteComponentProps, Link } from "react-router-dom"
 
 interface Props extends RouteComponentProps { }

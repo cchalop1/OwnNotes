@@ -1,5 +1,5 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import { hello, register, login } from './routes.ts'
+import { me, register, login } from './routes.ts'
 import { Database } from "https://deno.land/x/denodb/mod.ts";
 import "https://deno.land/x/dotenv/load.ts";
 import authMiddleware from './authMiddleware.ts';
@@ -22,7 +22,7 @@ await db.link([Users]);
 // await db.sync();
 
 router
-    .get("/", authMiddleware, hello)
+    .post("/me", authMiddleware, me)
     .post("/register", register)
     .post("/login", login)
     ;

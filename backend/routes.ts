@@ -3,10 +3,35 @@ import { Users } from "./models.ts";
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { hashPassword, generateToken } from "./utils.ts"
 
-export const hello = async (ctx: Context) => {
-    const allUsers = await Users.all();
+export const me = async (ctx: Context) => {
+    const body = await ctx.request.body().value;
+
+    if (!body.userId) {
+        ctx.response.status = 500;
+        ctx.response.body = {
+            success: false,
+            message: "bad request"
+        }
+        return;
+    }
+    const user = (await Users.where('users').all()).find((user: any) => {
+        if (user.id === body.userId)
+            return user;
+    });
+    if (!user) {
+        ctx.response.status = 422;
+        ctx.response.body = {
+            success: false,
+            message: 'Invalid uuid'
+        };
+        return;
+    }
     ctx.response.status = 200;
-    ctx.response.body = allUsers;
+    ctx.response.body = {
+        success: true,
+        username: user.username,
+        email: user.email
+    };
 };
 
 export const register = async (ctx: Context) => {
