@@ -51,6 +51,7 @@ export const login = async (ctx: Context) => {
     if (!user) {
         ctx.response.status = 422;
         ctx.response.body = {
+            success: false,
             message: 'Invalid username or password'
         };
         return;
