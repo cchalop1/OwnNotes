@@ -10,7 +10,7 @@ const header: Jose = {
 export const generateToken = (user: any) => {
     const payload: Payload = {
         iss: user.id,
-        exp: setExpiration(new Date().getTime() + 60000),
+        exp: setExpiration(new Date().getTime() + 600000),
     };
     return makeJwt({ key, header, payload });
 }

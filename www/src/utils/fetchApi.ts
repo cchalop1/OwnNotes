@@ -53,3 +53,39 @@ export const fetchMe = async (userId: string) => {
     };
     return await (await fetch(API + "/me", option)).json();
 }
+
+export const fetchNewNote = async (userId: string, title: string, content: string) => {
+    const authData = localStorage.getItem("login");
+    if (!authData)
+        return new Error("local storage");
+    const option = {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId,
+            title: title,
+            content: content
+        }),
+        headers: new Headers({
+            "Content-type": "application/json",
+            "Authorization": JSON.parse(authData).jwt
+        })
+    };
+    return await (await fetch(API + "/notes/new", option)).json();
+}
+
+export const fetchNotes = async (userId: string) => {
+    const authData = localStorage.getItem("login");
+    if (!authData)
+        return new Error("local storage");
+    const option = {
+        method: "POST",
+        body: JSON.stringify({
+            userId: userId
+        }),
+        headers: new Headers({
+            "Content-type": "application/json",
+            "Authorization": JSON.parse(authData).jwt
+        })
+    };
+    return await (await fetch(API + "/notes", option)).json();
+}

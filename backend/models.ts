@@ -12,3 +12,16 @@ export class Users extends Model {
         password: DataTypes.STRING
     };
 }
+
+export class Note extends Model {
+    static table = 'note';
+    static timestamps = true;
+    static fields = {
+        id: {
+            type: DataTypes.STRING
+        },
+        userId: DataTypes.STRING,
+        title: DataTypes.STRING,
+        content: DataTypes.STRING
+    };
+}

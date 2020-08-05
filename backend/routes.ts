@@ -1,5 +1,5 @@
 import { Context } from "https://deno.land/x/oak/mod.ts";
-import { Users } from "./models.ts";
+import { Users, Note } from "./models.ts";
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { hashPassword, generateToken } from "./utils.ts"
 
@@ -87,4 +87,39 @@ export const login = async (ctx: Context) => {
         userId: user.id,
         jwt: generateToken(user)
     }
+}
+
+
+export const newNote = async (ctx: Context) => {
+    const body = await ctx.request.body().value;
+    // TODO : add error handling
+    await Note.create({
+        id: v4.generate().toString(),
+        userId: body.userId,
+        title: body.title,
+        content: body.content
+    });
+    ctx.response.status = 200;
+    ctx.response.body = {
+        success: true,
+        jwt: "note saved"
+    }
+}
+
+
+export const getNotes = async (ctx: Context) => {
+    const body = await ctx.request.body().value;
+    // TODO: add error handling
+    const res = (await Note.all()).find((n: any) => n.userId == body.userId);
+    ctx.response.status = 200;
+    ctx.response.body = {
+        success: true,
+        message: "notes fetch corectly",
+        notes: res
+    }
+}
+
+
+export const getNote = async (ctx: Context) => {
+
 }

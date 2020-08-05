@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma-rtl.css" />
+
+    <title>OwnNotes</title>
+    <style>
+        .body {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login">
+        <div class="field">
+            <p class="control has-icons-left has-icons-right">
+                <input class="input email" type="email" placeholder="Email">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input password" type="password" placeholder="Password">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control">
+                <button class="button is-success btn-login">
+                    Login
+                </button>
+            </p>
+        </div>
+    </div>
+</body>
+
+<script>
+    const API = "http://localhost:8000";
+    let email = document.getElementsByClassName('email')[0];
+    let password = document.getElementsByClassName('password')[0];
+    let btn = document.getElementsByClassName('btn-login')[0];
+
+    const postLogin = async (e) => {
+        const option = {
+            method: "POST",
+            body: JSON.stringify({
+                email: email.value,
+                password: password.value
+            }),
+            headers: new Headers({
+                'Content-type': 'application/json'
+            })
+        };
+        const res = await fetch(API + "/login", option);
+        console.log(await res.json());
+        // return await res.json();
+    }
+
+    btn.addEventListener("click", postLogin);
+
+
+</script>
+
+</html>

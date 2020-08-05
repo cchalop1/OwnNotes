@@ -1,9 +1,9 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import { me, register, login } from './routes.ts'
+import { me, register, login, newNote, getNotes, getNote } from './routes.ts'
 import { Database } from "https://deno.land/x/denodb/mod.ts";
 import "https://deno.land/x/dotenv/load.ts";
 import authMiddleware from './authMiddleware.ts';
-import { Users } from "./models.ts";
+import { Users, Note } from "./models.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const SERVER_PORT: number = Number(Deno.env.get("SERVER_PORT")) || 8000;
@@ -18,11 +18,14 @@ const db = new Database('postgres', {
     port: 5432,
 });
 
-await db.link([Users]);
+await db.link([Users, Note]);
 // await db.sync();
 
 router
     .post("/me", authMiddleware, me)
+    .post("/notes/new", authMiddleware, newNote)
+    .post("/notes", authMiddleware, getNotes)
+    .get("/notes/:id", authMiddleware, getNote)
     .post("/register", register)
     .post("/login", login)
     ;
@@ -34,6 +37,7 @@ app.use(oakCors(
         origin: "http://localhost:3000"
     }
 ));
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 

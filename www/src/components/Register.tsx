@@ -8,6 +8,7 @@ export const Register: React.FC<Props> = ({ history }) => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState<null | string>(null);
 
     const handleRegister = async (e: any) => {
         const data: RegisterData = {
@@ -17,7 +18,7 @@ export const Register: React.FC<Props> = ({ history }) => {
         };
         const res = await fetchRegister(data);
         if (!res.success) {
-            console.error(res.message);
+            setError(res.message);
             return;
         }
         history.push("/login");
@@ -29,6 +30,7 @@ export const Register: React.FC<Props> = ({ history }) => {
             <input type="text" value={username} placeholder="enter your username" onChange={e => setUsername(e.target.value)} />
             <input type="password" value={password} placeholder="enter your password" onChange={e => setPassword(e.target.value)} />
             <button onClick={handleRegister}>Register</button>
+            {error ? <p style={{ color: "red" }}>{error}</p> : <p></p>}
             <Link to="/login">I have a acout</Link>
         </div>
     );
