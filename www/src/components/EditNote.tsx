@@ -5,6 +5,7 @@ import { fetchNewNote } from "../utils/fetchApi";
 
 interface Props {
     authData: AuthData;
+    setEditNote: (arg: boolean) => void;
 }
 
 export const EditNote: React.FC<Props> = (props) => {
@@ -16,8 +17,8 @@ export const EditNote: React.FC<Props> = (props) => {
         if (!title || !content)
             setError("fill all input for create new note");
         // TODO : fecht api
-        const res = await fetchNewNote(props.authData.userId, title, content)
-        console.log(res);
+        await fetchNewNote(props.authData.userId, title, content)
+        props.setEditNote(false);
     }
 
     return (

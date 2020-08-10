@@ -102,7 +102,7 @@ export const newNote = async (ctx: Context) => {
     ctx.response.status = 200;
     ctx.response.body = {
         success: true,
-        jwt: "note saved"
+        message: "note saved"
     }
 }
 
@@ -110,7 +110,16 @@ export const newNote = async (ctx: Context) => {
 export const getNotes = async (ctx: Context) => {
     const body = await ctx.request.body().value;
     // TODO: add error handling
-    const res = (await Note.all()).find((n: any) => n.userId == body.userId);
+    const res = (await Note.all()).filter((n: any) => n.userId == body.userId);
+    if (res.length === 0) {
+        ctx.response.status = 404;
+        ctx.response.body = {
+            success: false,
+            message: "not notes avalable",
+            notes: null 
+        }
+
+    }
     ctx.response.status = 200;
     ctx.response.body = {
         success: true,
