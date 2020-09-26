@@ -92,8 +92,16 @@ export const login = async (ctx: Context) => {
 
 export const newNote = async (ctx: Context) => {
     const body = await ctx.request.body().value;
-    // TODO : add error handling
-    await Note.create({
+
+    if (!body.userId || !body.title || !body.content) {
+        ctx.response.status = 500;
+        ctx.response.body = {
+            success: false,
+            message: "bad request"
+        }
+        return;
+    }
+    const res = await Note.create({
         id: v4.generate().toString(),
         userId: body.userId,
         title: body.title,
@@ -102,23 +110,42 @@ export const newNote = async (ctx: Context) => {
     ctx.response.status = 200;
     ctx.response.body = {
         success: true,
-        message: "note saved"
+        message: res
     }
+}
+
+export const updateNote = async (ctx: Context) => {
+    const body = await ctx.request.body().value;
+
+}
+
+
+export const deleteNote = async (ctx: Context) => {
+    const body = await ctx.request.body().value;
+
 }
 
 
 export const getNotes = async (ctx: Context) => {
     const body = await ctx.request.body().value;
-    // TODO: add error handling
+
+    if (!body.userId) {
+        ctx.response.status = 500;
+        ctx.response.body = {
+            success: false,
+            message: "bad request"
+        }
+        return;
+    }
     const res = (await Note.all()).filter((n: any) => n.userId == body.userId);
     if (res.length === 0) {
         ctx.response.status = 404;
         ctx.response.body = {
             success: false,
             message: "not notes avalable",
-            notes: null 
+            notes: null
         }
-
+        return;
     }
     ctx.response.status = 200;
     ctx.response.body = {
@@ -130,5 +157,29 @@ export const getNotes = async (ctx: Context) => {
 
 
 export const getNote = async (ctx: Context) => {
+    const body = await ctx.request;
+    const noteId = await body.url.pathname.split("/")[2];
 
+    if (!noteId) {
+        ctx.response.status = 500;
+        ctx.response.body = {
+            success: false,
+            message: "bad request"
+        }
+        return;
+    }
+    const res = (await Note.all()).find((note: any) => note.id === noteId);
+    if (!res) {
+        ctx.response.status = 404;
+        ctx.response.body = {
+            success: false,
+            message: "not note avalable",
+            notes: null
+        }
+    }
+    ctx.response.status = 200;
+    ctx.response.body = {
+        success: true,
+        notes: res
+    }
 }

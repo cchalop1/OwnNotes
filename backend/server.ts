@@ -26,6 +26,8 @@ router
     .post("/notes/new", authMiddleware, newNote)
     .post("/notes", authMiddleware, getNotes)
     .get("/notes/:id", authMiddleware, getNote)
+    .post("/notes/:id", authMiddleware, getNote)
+    // .update("/notes/:id", authMiddleware, getNote)
     .post("/register", register)
     .post("/login", login)
     ;

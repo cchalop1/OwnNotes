@@ -5,6 +5,7 @@ import { fetchNotes } from "../utils/fetchApi";
 
 interface Props {
     authData: AuthData;
+    setFocuseNote: (arg: null | any) => void;
 }
 
 export const ListNotes: React.FC<Props> = (props) => {
@@ -30,7 +31,10 @@ export const ListNotes: React.FC<Props> = (props) => {
     } else {
         return (<div className="list">
             {list.map((note, idx) => {
-                return (<p key={idx}>{note.title}</p>);
+                return (<div key={idx} style={{ height: "30px" }} onClick={() => {
+                    props.setFocuseNote(note);
+                    // console.log(note);
+                }}>{note.title}</div>);
             })}
         </div>);
     }
